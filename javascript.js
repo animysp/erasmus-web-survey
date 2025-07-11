@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const declineInvitation = document.getElementById('decline-invitation');
     const declineInformation = document.getElementById('decline-information');
     const closeModalButton = document.getElementById('close-modal-button');
-    
+
 
     // At start: hide collapsed modal content
     if (collapsedModalContent) collapsedModalContent.style.display = 'none';
@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event listeners for reminder buttons
     const reminderButtons = document.querySelectorAll('.reminder-button');
-    
+
     reminderButtons.forEach(button => {
         button.addEventListener('click', function (e) {
             e.preventDefault();
@@ -524,10 +524,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             // Start the smooth transition to collapsed state
-            modal.style.width = '120px';
-            modal.style.height = '120px';
-            modal.style.left = 'calc(100vw - 168px)';
-            modal.style.top = 'calc(100vh - 168px)';
+            modal.style.width = '96px';
+            modal.style.height = '96px';
+            modal.style.left = 'calc(100vw - 144px)';
+            modal.style.top = 'calc(100vh - 144px)';
             modal.style.borderRadius = 'var(--radius-rounded)';
 
             // Show collapsed content during transition
@@ -650,6 +650,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (collapsedModalContent) {
         collapsedModalContent.addEventListener('click', function (e) {
             e.preventDefault();
+
+            // Cancel pending reminder message if it hasn't appeared yet
+            if (reminderTimeoutId) {
+                clearTimeout(reminderTimeoutId);
+                reminderTimeoutId = null;
+            }
+
+            stopJumpingAnimation(); // Stop any jumping animation
+            hideReminderMessage(); // Hide reminder message if it's already visible
             expandModal();
         });
     }
@@ -704,5 +713,170 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             showReminderModal();
         });
+    }
+
+    const reminderMessage = document.getElementById('reminder-message');
+
+    // At start: hide reminder message
+    if (reminderMessage) {
+        reminderMessage.style.display = 'none';
+        reminderMessage.style.opacity = '0';
+    }
+
+    let reminderTimeoutId = null; // Add this variable to track the reminder timeout
+
+    reminderButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            // Collapse modal after reminder time is selected
+            collapseModal();
+
+            // Show reminder message after 3 seconds (store timeout ID)
+            reminderTimeoutId = setTimeout(() => {
+                showReminderMessage();
+                reminderTimeoutId = null; // Clear the ID after timeout executes
+            }, 3000);
+        });
+    });
+
+    let reminderAnimationInterval = null;
+
+    function showReminderMessage() {
+        if (reminderMessage) {
+            reminderMessage.style.display = '';
+            reminderMessage.style.position = 'fixed';
+            reminderMessage.style.right = 'calc(144px + 24px)'; // 120px modal + 48px margin + 24px gap
+            reminderMessage.style.bottom = 'calc(48px + 48px)'; // 48px margin + 60px (half of modal height)
+            reminderMessage.style.transform = 'translateY(50%)'; // Center vertically
+            reminderMessage.style.transition = 'opacity 0.5s ease-in-out';
+
+            // Gradually show the message
+            setTimeout(() => {
+                reminderMessage.style.opacity = '1';
+
+                // Start jumping animation after message appears
+                setTimeout(() => {
+                    startJumpingAnimation();
+                }, 500);
+            }, 100);
+        }
+    }
+
+    function startJumpingAnimation() {
+        if (!modal || !reminderMessage) return;
+
+        let jumpCount = 0;
+
+        function performJump() {
+            // Apply jump animation to both modal and reminder message
+            // Use ease-out for jumping up (slower start, faster end)
+            modal.style.transition = 'transform 0.4s ease-out';
+            reminderMessage.style.transition = 'transform 0.4s ease-out, opacity 0.5s ease-in-out';
+
+            // Jump up
+            modal.style.transform = 'translateY(-48px)';
+            reminderMessage.style.transform = 'translateY(calc(50% - 48px))';
+
+            setTimeout(() => {
+                // Use ease-in for landing down (faster start, slower end)
+                modal.style.transition = 'transform 0.3s ease-in';
+                reminderMessage.style.transition = 'transform 0.3s ease-in, opacity 0.5s ease-in-out';
+
+                // Jump down
+                modal.style.transform = 'translateY(0)';
+                reminderMessage.style.transform = 'translateY(50%)';
+
+                jumpCount++;
+
+                // If completed 2 jumps, wait 1 second before next set
+                if (jumpCount >= 2) {
+                    jumpCount = 0;
+                    reminderAnimationInterval = setTimeout(() => {
+                        if (reminderMessage && reminderMessage.style.opacity === '1') {
+                            performJump();
+                        }
+                    }, 1500); // Increased wait time between sets
+                } else {
+                    // Continue jumping (longer delay between jumps)
+                    setTimeout(() => {
+                        if (reminderMessage && reminderMessage.style.opacity === '1') {
+                            performJump();
+                        }
+                    }, 300); // Increased delay between individual jumps
+                }
+            }, 300); // Increased time for jump up duration
+        }
+
+        // Start the jumping sequence
+        performJump();
+    }
+
+    function stopJumpingAnimation() {
+        // Clear any pending animation timeouts
+        if (reminderAnimationInterval) {
+            clearTimeout(reminderAnimationInterval);
+            reminderAnimationInterval = null;
+        }
+
+        // Reset transforms
+        if (modal) {
+            modal.style.transform = '';
+            modal.style.transition = '';
+        }
+        if (reminderMessage) {
+            reminderMessage.style.transform = 'translateY(50%)';
+            reminderMessage.style.transition = 'opacity 0.5s ease-in-out';
+        }
+    }
+
+    function hideReminderMessage() {
+        if (reminderMessage) {
+            stopJumpingAnimation(); // Stop animation before hiding
+
+            reminderMessage.style.transition = 'opacity 0.3s ease-out';
+            reminderMessage.style.opacity = '0';
+            setTimeout(() => {
+                reminderMessage.style.display = 'none';
+            }, 300);
+        }
+    }
+
+    // --- Result Page Logic ---
+    if (window.location.pathname.includes('result.html')) {
+        // ...existing result page code...
+
+        // Close results button functionality
+        const closeResultsButton = document.getElementById('close-results-button');
+        const closeButton = document.getElementById('close-button');
+
+        function closeResultsModal() {
+            if (modal) {
+                modal.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                modal.style.opacity = '0';
+                modal.style.transform = 'scale(0.95)';
+
+                setTimeout(() => {
+                    window.close(); // Try to close the window/tab
+                    // If window.close() doesn't work (e.g., not opened by script), redirect
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 100);
+                }, 500);
+            }
+        }
+
+        if (closeResultsButton) {
+            closeResultsButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                closeResultsModal();
+            });
+        }
+
+        if (closeButton) {
+            closeButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                closeResultsModal();
+            });
+        }
     }
 });
