@@ -284,6 +284,12 @@ strong {
     letter-spacing: var(--p2-regular-letter-spacing);
 }
 
+.button-link svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
 .button-link:hover {
     color: var(--color-brand-primary-400);
     text-decoration: underline;
@@ -345,9 +351,9 @@ strong {
     margin: 0;
     box-sizing: border-box;
     display: flex;
-    padding: 24px;
-    width: 120px;
-    height: 120px;
+    padding: 16px;
+    width: 96px;
+    height: 96px;
     justify-content: center;
     align-items: center;
     border-radius: var(--radius-rounded);
@@ -367,7 +373,7 @@ strong {
 .modal-content.collapsed {
     box-sizing: border-box;
     display: flex;
-    padding: 24px;
+    padding: 20px;
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -400,9 +406,9 @@ strong {
 }
 
 
-.modal-nav svg {
-    width: 16px;
-    height: 16px;
+.modal-nav .close-icon-button svg {
+    width: 20px;
+    height: 20px;
 }
 
 .modal-content {
@@ -649,6 +655,22 @@ label.checkbox {
     width: 100%;
     min-width: 0;
     flex: 1 0 0;
+}
+
+.reminder-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: var(--color-brand-secondary-500);
+    padding: 8px 16px;
+    border-radius: var(--radius-rounded);
+    color: var(--color-neutral-0);
+    white-space: nowrap;
+    z-index: 9998;
+    transition: opacity 0.5s ease-in-out, transform 0.2s ease-out;
+    transform-origin: center;
 }
 
 /* Information Styles */
