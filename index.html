@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styleguide.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="javascript.js"></script>
+</head>
+
+<body>
+    <div class="modal">
+        <div class="modal-nav" id="modal-nav">
+            <a href="index.html" class="button-link" id="back-to-invitation">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentcolor" xmlns="http://www.w3.org/2000/svg">
+                    <g id="icon-arrow-left">
+                        <path id="Vector" fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.3034 2.69661C11.6898 2.31022 12.3148 2.30559 12.7069 2.68621C13.1072 3.07489 13.112 3.71607 12.7174 4.11064L5.828 11H21C21.5523 11 22 11.4477 22 12C22 12.5523 21.5523 13 21 13H5.828L12.707 19.8789C13.0975 20.2694 13.0975 20.9025 12.707 21.293C12.3165 21.6834 11.6833 21.6833 11.2928 21.2928C7.96581 17.9658 5.27514 15.2751 2 12L11.3034 2.69661Z"
+                            fill="currentcolor" />
+                    </g>
+                </svg>
+                <span>Back to Invitation</span>
+            </a>
+            <a href="questionnaire.html" class="button-link" id="back-to-questionnaire">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentcolor" xmlns="http://www.w3.org/2000/svg">
+                    <g id="icon-arrow-left">
+                        <path id="Vector" fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.3034 2.69661C11.6898 2.31022 12.3148 2.30559 12.7069 2.68621C13.1072 3.07489 13.112 3.71607 12.7174 4.11064L5.828 11H21C21.5523 11 22 11.4477 22 12C22 12.5523 21.5523 13 21 13H5.828L12.707 19.8789C13.0975 20.2694 13.0975 20.9025 12.707 21.293C12.3165 21.6834 11.6833 21.6833 11.2928 21.2928C7.96581 17.9658 5.27514 15.2751 2 12L11.3034 2.69661Z"
+                            fill="currentcolor" />
+                    </g>
+                </svg>
+                <span>Back to Questionnaire</span>
+            </a>
+            <div class="close-modal-button-container">
+                <div class="button-link" id="close-modal-button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentcolor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g id="icon-close">
+                            <path id="Vector"
+                                d="M13.41 12L19.71 5.71C19.8983 5.5217 20.0041 5.2663 20.0041 5C20.0041 4.7337 19.8983 4.47831 19.71 4.29C19.5217 4.1017 19.2663 3.99591 19 3.99591C18.7337 3.99591 18.4783 4.1017 18.29 4.29L12 10.59L5.71 4.29C5.5217 4.1017 5.2663 3.99591 5 3.99591C4.7337 3.99591 4.4783 4.1017 4.29 4.29C4.1017 4.47831 3.99591 4.7337 3.99591 5C3.99591 5.2663 4.1017 5.5217 4.29 5.71L10.59 12L4.29 18.29C4.19627 18.383 4.12188 18.4936 4.07111 18.6154C4.02034 18.7373 3.9942 18.868 3.9942 19C3.9942 19.132 4.02034 19.2627 4.07111 19.3846C4.12188 19.5064 4.19627 19.617 4.29 19.71C4.38296 19.8037 4.49356 19.8781 4.61542 19.9289C4.73728 19.9797 4.86799 20.0058 5 20.0058C5.13201 20.0058 5.26272 19.9797 5.38458 19.9289C5.50644 19.8781 5.61704 19.8037 5.71 19.71L12 13.41L18.29 19.71C18.383 19.8037 18.4936 19.8781 18.6154 19.9289C18.7373 19.9797 18.868 20.0058 19 20.0058C19.132 20.0058 19.2627 19.9797 19.3846 19.9289C19.5064 19.8781 19.617 19.8037 19.71 19.71C19.8037 19.617 19.8781 19.5064 19.9289 19.3846C19.9797 19.2627 20.0058 19.132 20.0058 19C20.0058 18.868 19.9797 18.7373 19.9289 18.6154C19.8781 18.4936 19.8037 18.383 19.71 18.29L13.41 12Z"
+                                fill="currentcolor" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-content invitation" id="invitation-modal-content">
+            <div class="invitation-header">
+                <h4>You’re invited to participate in</h4>
+                <h1>Emotional Wellbeing Survey</h1>
+                <p>Your valuable contribution helps us improve our research.</p>
+            </div>
+            <div class="invitation-content">
+                <div class="invitation-info">
+                    <div class="short-info">
+                        <div class="invitation-info-item">
+                            <svg class="info-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g id="icon-clock">
+                                    <path id="Vector"
+                                        d="M15 11H13V7C13 6.73478 12.8946 6.48043 12.7071 6.29289C12.5196 6.10536 12.2652 6 12 6C11.7348 6 11.4804 6.10536 11.2929 6.29289C11.1054 6.48043 11 6.73478 11 7V12C11 12.2652 11.1054 12.5196 11.2929 12.7071C11.4804 12.8946 11.7348 13 12 13H15C15.2652 13 15.5196 12.8946 15.7071 12.7071C15.8946 12.5196 16 12.2652 16 12C16 11.7348 15.8946 11.4804 15.7071 11.2929C15.5196 11.1054 15.2652 11 15 11ZM12 2C10.0222 2 8.08879 2.58649 6.4443 3.6853C4.79981 4.78412 3.51809 6.3459 2.76121 8.17317C2.00433 10.0004 1.8063 12.0111 2.19215 13.9509C2.578 15.8907 3.53041 17.6725 4.92894 19.0711C6.32746 20.4696 8.10929 21.422 10.0491 21.8079C11.9889 22.1937 13.9996 21.9957 15.8268 21.2388C17.6541 20.4819 19.2159 19.2002 20.3147 17.5557C21.4135 15.9112 22 13.9778 22 12C22 10.6868 21.7413 9.38642 21.2388 8.17317C20.7363 6.95991 19.9997 5.85752 19.0711 4.92893C18.1425 4.00035 17.0401 3.26375 15.8268 2.7612C14.6136 2.25866 13.3132 2 12 2ZM12 20C10.4178 20 8.87104 19.5308 7.55544 18.6518C6.23985 17.7727 5.21447 16.5233 4.60897 15.0615C4.00347 13.5997 3.84504 11.9911 4.15372 10.4393C4.4624 8.88743 5.22433 7.46197 6.34315 6.34315C7.46197 5.22433 8.88743 4.4624 10.4393 4.15372C11.9911 3.84504 13.5997 4.00346 15.0615 4.60896C16.5233 5.21447 17.7727 6.23984 18.6518 7.55544C19.5308 8.87103 20 10.4177 20 12C20 14.1217 19.1572 16.1566 17.6569 17.6569C16.1566 19.1571 14.1217 20 12 20Z"
+                                        fill="currentColor" />
+                                </g>
+                            </svg>
+                            <span class="light"><strong>8 minutes</strong> at your convenience</span>
+                        </div>
+                        <div class="invitation-info-item">
+                            <svg class="info-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentcolor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g id="icon-gift">
+                                    <path id="Vector"
+                                        d="M18 6.99998H17.65C17.8782 6.53274 17.9979 6.01996 18 5.49998C18.003 4.8033 17.7975 4.12167 17.4098 3.54281C17.0221 2.96395 16.4701 2.51436 15.8247 2.25192C15.1794 1.98947 14.4703 1.92618 13.7886 2.07019C13.107 2.2142 12.4841 2.55892 12 3.05998C11.5159 2.55892 10.893 2.2142 10.2114 2.07019C9.52975 1.92618 8.82061 1.98947 8.17525 2.25192C7.5299 2.51436 6.97786 2.96395 6.59019 3.54281C6.20252 4.12167 5.99697 4.8033 6 5.49998C6.00213 6.01996 6.12178 6.53274 6.35 6.99998H6C5.20435 6.99998 4.44129 7.31605 3.87868 7.87866C3.31607 8.44127 3 9.20433 3 9.99998V12C3 12.2652 3.10536 12.5195 3.29289 12.7071C3.48043 12.8946 3.73478 13 4 13H5V19C5 19.7956 5.31607 20.5587 5.87868 21.1213C6.44129 21.6839 7.20435 22 8 22H16C16.7956 22 17.5587 21.6839 18.1213 21.1213C18.6839 20.5587 19 19.7956 19 19V13H20C20.2652 13 20.5196 12.8946 20.7071 12.7071C20.8946 12.5195 21 12.2652 21 12V9.99998C21 9.20433 20.6839 8.44127 20.1213 7.87866C19.5587 7.31605 18.7956 6.99998 18 6.99998ZM11 20H8C7.73478 20 7.48043 19.8946 7.29289 19.7071C7.10536 19.5195 7 19.2652 7 19V13H11V20ZM11 11H5V9.99998C5 9.73476 5.10536 9.48041 5.29289 9.29287C5.48043 9.10533 5.73478 8.99998 6 8.99998H11V11ZM11 6.99998H9.5C9.20333 6.99998 8.91332 6.912 8.66665 6.74718C8.41997 6.58236 8.22771 6.34809 8.11418 6.074C8.00065 5.79991 7.97094 5.49831 8.02882 5.20734C8.0867 4.91637 8.22956 4.64909 8.43934 4.43932C8.64912 4.22954 8.91639 4.08668 9.20736 4.0288C9.49834 3.97092 9.79994 4.00063 10.074 4.11416C10.3481 4.22769 10.5824 4.41995 10.7472 4.66662C10.912 4.91329 11 5.2033 11 5.49998V6.99998ZM13 5.49998C13 5.2033 13.088 4.91329 13.2528 4.66662C13.4176 4.41995 13.6519 4.22769 13.926 4.11416C14.2001 4.00063 14.5017 3.97092 14.7926 4.0288C15.0836 4.08668 15.3509 4.22954 15.5607 4.43932C15.7704 4.64909 15.9133 4.91637 15.9712 5.20734C16.0291 5.49831 15.9994 5.79991 15.8858 6.074C15.7723 6.34809 15.58 6.58236 15.3334 6.74718C15.0867 6.912 14.7967 6.99998 14.5 6.99998H13V5.49998ZM17 19C17 19.2652 16.8946 19.5195 16.7071 19.7071C16.5196 19.8946 16.2652 20 16 20H13V13H17V19ZM19 11H13V8.99998H18C18.2652 8.99998 18.5196 9.10533 18.7071 9.29287C18.8946 9.48041 19 9.73476 19 9.99998V11Z"
+                                        fill="currentColor" />
+                                </g>
+                            </svg>
+                            <span class="light">Get your scores upon completion</span>
+                        </div>
+                        <div class="invitation-info-item with-link">
+                            <svg class="info-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentcolor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g id="icon-date">
+                                    <path id="Vector"
+                                        d="M19 4H17V3C17 2.73478 16.8946 2.48043 16.7071 2.29289C16.5196 2.10536 16.2652 2 16 2C15.7348 2 15.4804 2.10536 15.2929 2.29289C15.1054 2.48043 15 2.73478 15 3V4H9V3C9 2.73478 8.89464 2.48043 8.70711 2.29289C8.51957 2.10536 8.26522 2 8 2C7.73478 2 7.48043 2.10536 7.29289 2.29289C7.10536 2.48043 7 2.73478 7 3V4H5C4.20435 4 3.44129 4.31607 2.87868 4.87868C2.31607 5.44129 2 6.20435 2 7V19C2 19.7956 2.31607 20.5587 2.87868 21.1213C3.44129 21.6839 4.20435 22 5 22H19C19.7956 22 20.5587 21.6839 21.1213 21.1213C21.6839 20.5587 22 19.7956 22 19V7C22 6.20435 21.6839 5.44129 21.1213 4.87868C20.5587 4.31607 19.7956 4 19 4ZM20 19C20 19.2652 19.8946 19.5196 19.7071 19.7071C19.5196 19.8946 19.2652 20 19 20H5C4.73478 20 4.48043 19.8946 4.29289 19.7071C4.10536 19.5196 4 19.2652 4 19V12H20V19ZM20 10H4V7C4 6.73478 4.10536 6.48043 4.29289 6.29289C4.48043 6.10536 4.73478 6 5 6H7V7C7 7.26522 7.10536 7.51957 7.29289 7.70711C7.48043 7.89464 7.73478 8 8 8C8.26522 8 8.51957 7.89464 8.70711 7.70711C8.89464 7.51957 9 7.26522 9 7V6H15V7C15 7.26522 15.1054 7.51957 15.2929 7.70711C15.4804 7.89464 15.7348 8 16 8C16.2652 8 16.5196 7.89464 16.7071 7.70711C16.8946 7.51957 17 7.26522 17 7V6H19C19.2652 6 19.5196 6.10536 19.7071 6.29289C19.8946 6.48043 20 6.73478 20 7V10Z"
+                                        fill="currentColor" />
+                                </g>
+                            </svg>
+
+                            <span class="light">Survey available until&nbsp;<strong>30 July 2025</strong></span>
+                            <a href="https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NXFiMWYxdGZocDdtdThsZ2F0ZTBjbWh2MTggcGF0Y2hhcmFwaG9uLnNyaUBt&tmsrc=patcharaphon.sri%40gmail.com"
+                                class="button-link"><span class="small medium">
+                                    add to your calendar
+                                </span></a>
+
+                        </div>
+                    </div>
+                    <div class="additional-info">
+                        <div class="invitation-info-item with-link">
+                            <svg class="info-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentcolor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g id="icon-question">
+                                    <path id="Vector" fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M9.11241 7.82201C9.44756 6.83666 10.5551 6 12 6C13.7865 6 15 7.24054 15 8.5C15 9.75946 13.7865 11 12 11C11.4477 11 11 11.4477 11 12V14C11 14.5523 11.4477 15 12 15C12.5523 15 13 14.5523 13 14V12.9082C15.203 12.5001 17 10.7706 17 8.5C17 5.89347 14.6319 4 12 4C9.82097 4 7.86728 5.27185 7.21894 7.17799C7.0411 7.70085 7.3208 8.26889 7.84366 8.44673C8.36653 8.62458 8.93457 8.34488 9.11241 7.82201ZM12 20C12.8285 20 13.5 19.3284 13.5 18.5C13.5 17.6716 12.8285 17 12 17C11.1716 17 10.5 17.6716 10.5 18.5C10.5 19.3284 11.1716 20 12 20Z"
+                                        fill="currentcolor" />
+                                </g>
+                            </svg>
+
+                            <span class="small light">Curious how your data will be used ?</span>
+                            <div class="button-link" id="information-link">
+                                <span class="small medium">Learn more about this research</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentcolor"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g id="icon-arrow-right">
+                                        <path id="Vector" fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M12.6966 2.69661C12.3102 2.31022 11.6852 2.30559 11.2931 2.68621C10.8928 3.07489 10.888 3.71607 11.2826 4.11064L18.172 11H3C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13H18.172L11.293 19.8789C10.9025 20.2694 10.9025 20.9025 11.293 21.293C11.6835 21.6834 12.3167 21.6833 12.7072 21.2928C16.0342 17.9658 18.7249 15.2751 22 12L12.6966 2.69661Z"
+                                            fill="currentcolor" />
+                                    </g>
+                                </svg>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="invitation-illustration">
+                    <img src="images/illustration.svg" class="invitation-image" alt="Invitation Illustration">
+                </div>
+
+            </div>
+            <div class="consent">
+                <label class="checkbox" for="consent-checkbox-invitation">
+                    <input type="checkbox" id="consent-checkbox-invitation" name="consent-checkbox-invitation" required>
+                    <span class="checkbox-box"></span>
+                    I consent to participate in this survey and understand that my responses will be used for research
+                    purposes. I may withdraw my consent at any time.
+                </label>
+            </div>
+            <div class="invitation-actions">
+                <p class="small light warning">Please confirm your consent by checking the box above.</p>
+                <div class="primary-actions">
+                    <button class="button primary" id="decline-invitation">Decline</button>
+                    <a href="questionnaire.html" class="button primary" id="join-questionnaire">Join</a>
+                </div>
+                <div class="secondary-actions">
+                    <p class="light">Short on time? We understand – choose the time that works best for you.</p>
+                    <button class="button secondary" id="remind-invitation">Remind Me Later</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-content information" id="information-modal-content">
+            <h2 class="bold">Information</h2>
+            <div class="information-container">
+                <div class="information-nav">
+                    <ul class="information-list">
+                        <li class="information-item-link" id="information-item-1-link">
+                            <a href="#information-item-1" class="bold">Purpose of the Survey</a>
+                        </li>
+                        <li class="information-item-link" id="information-item-2-link">
+                            <a href="#information-item-2" class="bold">Data Collection and Uses</a>
+                        </li>
+                        <li class="information-item-link" id="information-item-3-link">
+                            <a href="#information-item-3" class="bold">What is the PHQ-9?</a>
+                        </li>
+                        <li class="information-item-link" id="information-item-4-link">
+                            <a href="#information-item-4" class="bold">Confidentiality</a>
+                        </li>
+                        <li class="information-item-link" id="information-item-5-link">
+                            <a href="#information-item-5" class="bold">Data Retention</a>
+                        </li>
+                        <li class="information-item-link" id="information-item-6-link">
+                            <a href="#information-item-6" class="bold">Contact Information</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="information-content scrollable">
+                    <div class="information-item" id="information-item-1">
+                        <h3 class="information-title">Purpose of the Survey</h3>
+                        <p class="light">
+                            This research study investigates how different survey interface designs and presentation
+                            methods affect engagement in survey participation, particularly among individuals with
+                            mental health concerns. We are examining various aspects of online survey design to
+                            understand what makes surveys more accessible and user-friendly.
+                        </p>
+                    </div>
+                    <div class="information-item" id="information-item-2">
+                        <h3 class="information-title">Data Collection and Uses</h3>
+                        <p class="light">
+                            During this study, we will collect the following information:
+                        </p>
+                        <div class="information-list">
+                            <strong>Survey Response Data</strong>
+                            <ul>
+                                <li>Demographic information</li>
+                                <li>Your responses to the PHQ-9 questionnaire</li>
+                                <li>Previous experience with online surveys</li>
+                            </ul>
+                        </div>
+                        <p class="light">
+                            <strong>Behavioral Data</strong>
+                        <ul>
+                            <li>Time spent viewing the survey invitation</li>
+                            <li>Click patterns and navigation behavior</li>
+                            <li>Completion rate and response time for different sections</li>
+                            <li>Device type and browser information</li>
+                        </ul>
+                        </p>
+                        <p class="light">
+                            <strong>Additional Information</strong> <br>
+                            Feedback about your experience with the survey interface
+                        </p>
+                        <p class="light">
+                            The data will be analyzed to better understand user responses to different design elements
+                            and to develop improved survey invitation interfaces for future research.
+                        </p>
+                    </div>
+                    <div class="information-item" id="information-item-3">
+                        <h3 class="information-title">What is the PHQ-9?</h3>
+                        <p class="light">
+                            The Patient Health Questionnaire-9 (PHQ-9) is a widely-used, validated screening tool for
+                            depression. It consists of 9 questions that ask about symptoms you may have experienced over
+                            the past two weeks.
+
+                            In this study, this questionnaire is used for research purposes only and does not constitute
+                            a clinical diagnosis. Your responses help researchers understand mental health patterns in
+                            the general population.
+                        </p>
+                    </div>
+
+                    <div class="information-item" id="information-item-4">
+                        <h3 class="information-title">Confidentiality</h3>
+                        <p class="light">
+                            All information you provide will be kept confidential and will be accessible
+                            only to the researchers involved in this project. Your personal information and demographic
+                            details will be fully anonymized. The results of the study will be reported without any
+                            personal identification.
+                        </p>
+                    </div>
+                    <div class="information-item" id="information-item-5">
+                        <h3 class="information-title">Data Retention</h3>
+                        <p class="light">
+                            During the study, all data will be stored on secure systems. Electronic data will be stored
+                            in a secure cloud storage, accessible only through a password-protected account known only
+                            to the research team. Any paper-based materials will be stored in a secure location, with
+                            access limited to the research team. All data will be retained for at least 4 years for the
+                            purpose of verification or reference if necessary.
+                        </p>
+                    </div>
+                    <div class="information-item" id="information-item-6">
+                        <h3 class="information-title">Contact Information</h3>
+                        <p class="light">
+                            If you have any questions or concerns about this research study, please contact:
+                        </p>
+                        <p class="light">
+                            <strong>Research Team Email:</strong>
+                            <a href="mailto:patcharaphon.s@cmu.ac.th">patcharaphon.s@cmu.ac.th</a>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="information-footer" id="information-footer">
+                <div class="consent">
+                    <label class="checkbox" for="consent-checkbox-information">
+                        <input type="checkbox" id="consent-checkbox-information" name="consent-checkbox-information"
+                            required>
+                        <span class="checkbox-box"></span>
+                        I consent to participate in this survey and understand that my responses will be used for
+                        research
+                        purposes. I may withdraw my consent at any time.
+                    </label>
+                </div>
+                <div class="information-actions">
+                    <p class="small light warning">Please confirm your consent by checking the box above.</p>
+                    <div class="primary-actions">
+                        <button class="button secondary" id="remind-information">Remind Me Later</button></a>
+                        <button class="button primary" id="decline-information">Decline</button></a>
+                        <a href="questionnaire.html" class="button primary" id="join-questionnaire">Join</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-content reminder" id="reminder-modal-content">
+            <h4>Let us know when to remind you</h4>
+            <div class="reminder-buttons">
+                <button class="button secondary reminder-button" id="reminder-button-1"> in 5 minutes</button>
+                <button class="button secondary reminder-button" id="reminder-button-2"> in 15 minutes</button>
+                <button class="button secondary reminder-button" id="reminder-button-3"> in 30 minutes</button>
+                <button class="button secondary reminder-button" id="reminder-button-4"> in 1 hour</button>
+            </div>
+        </div>
+
+        <div class="modal-content collapsed" id="collapsed-modal-content">
+            <img src="images/questionnaire-icon.png" alt="Collapsed Icon" class="collapsed-icon">
+        </div>
+    </div>
+
+
+</body>
+
+</html>
