@@ -1,15 +1,48 @@
 console.log('JS loaded');
 
 document.addEventListener('DOMContentLoaded', function () {
+    // --- Get common elements ---
+    const modal = document.querySelector('.modal');
+    
+    // --- Modal Push-in Animation ---
+    const isIndexPage = window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+    const isResultPage = window.location.pathname.includes('result.html');
+    const shouldTriggerPushIn = sessionStorage.getItem('triggerPushIn') === 'true';
+    
+    // Add push-in animation for index page, result page, or when returning from result
+    if (modal && (isIndexPage || isResultPage || shouldTriggerPushIn)) {
+        // Clear the flag if it was set
+        if (shouldTriggerPushIn) {
+            sessionStorage.removeItem('triggerPushIn');
+        }
+        
+        // Prepare modal for animation
+        modal.classList.add('push-in-prepare');
+        
+        // Trigger animation after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            modal.classList.remove('push-in-prepare');
+            modal.classList.add('push-in');
+            
+            // Clean up animation class after animation completes
+            setTimeout(() => {
+                modal.classList.remove('push-in');
+            }, 600);
+        }, 50);
+    }
+
     // --- Modal Content Switching ---
     const urlParams = new URLSearchParams(window.location.search);
     const showInfo = urlParams.get('info') === 'true';
+    const fromQuestionnaire = urlParams.get('from') === 'questionnaire';
     const invitationModalContent = document.getElementById('invitation-modal-content');
     const informationModalContent = document.getElementById('information-modal-content');
     const backToInvitation = document.getElementById('back-to-invitation');
     const backToQuestionnaire = document.getElementById('back-to-questionnaire');
     const infoFooter = document.getElementById('information-footer');
     const informationLink = document.getElementById('information-link');
+    const closeModalButton = document.getElementById('close-modal-button');
+    const closeModalButtonContainer = document.querySelector('.close-modal-button-container');
 
     if (showInfo) {
         invitationModalContent && (invitationModalContent.style.display = 'none');
@@ -17,10 +50,20 @@ document.addEventListener('DOMContentLoaded', function () {
         backToInvitation && (backToInvitation.style.display = 'none');
         backToQuestionnaire && (backToQuestionnaire.style.display = '');
         infoFooter && (infoFooter.style.display = 'none');
+        
+        // Hide close button if coming from questionnaire
+        if (fromQuestionnaire) {
+            closeModalButton && (closeModalButton.style.display = 'none');
+            closeModalButtonContainer && (closeModalButtonContainer.style.display = 'none');
+        }
     } else {
         informationModalContent && (informationModalContent.style.display = 'none');
         backToInvitation && (backToInvitation.style.display = 'none');
         backToQuestionnaire && (backToQuestionnaire.style.display = 'none');
+        
+        // Show close button when not in info mode
+        closeModalButton && (closeModalButton.style.display = '');
+        closeModalButtonContainer && (closeModalButtonContainer.style.display = '');
     }
 
     informationLink && informationLink.addEventListener('click', () => {
@@ -30,6 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
         informationModalContent && (informationModalContent.style.opacity = '1');
         backToInvitation && (backToInvitation.style.display = '');
         backToQuestionnaire && (backToQuestionnaire.style.display = 'none');
+        
+        // Show close button when accessing from invitation (not from questionnaire)
+        closeModalButton && (closeModalButton.style.display = '');
+        closeModalButtonContainer && (closeModalButtonContainer.style.display = '');
     });
 
     // Also fix the back to invitation function
@@ -50,6 +97,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Questionnaire State Persistence ---
     const isQuestionnaire = window.location.pathname.includes('questionnaire.html');
+    
+    function clearQuestionnaireState() {
+        sessionStorage.removeItem('questionnaireState');
+    }
+    
     function saveQuestionnaireState() {
         const state = {
             content: document.getElementById('questionnaire-content-2')?.style.display !== 'none' ? 2 : 1,
@@ -114,37 +166,76 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (state.content === 2) {
-            document.getElementById('questionnaire-content-1').style.display = 'none';
-            document.getElementById('questionnaire-content-2').style.display = '';
+            // Use dissolve transition when restoring to content 2
+            if (document.getElementById('questionnaire-content-1').style.display !== 'none') {
+                dissolveTransition('questionnaire-content-1', 'questionnaire-content-2', () => {
+                    // Restore content 2 button states
+                    if (submitButton2 && state.hasOwnProperty('submitButton2Disabled')) {
+                        submitButton2.disabled = state.submitButton2Disabled;
+                    }
 
-            // Restore progress text for content 2
-            if (progressText && state.progressText) {
-                progressText.textContent = state.progressText;
-            }
+                    // Restore the progress bar state if it was saved
+                    if (progressBarFill && state.progressBarWidth) {
+                        progressBarFill.style.width = state.progressBarWidth;
+                    }
+                }, state.progressText || "You're doing great! Just one more step.");
+            } else {
+                // Already on content 2, just restore states
+                document.getElementById('questionnaire-content-1').style.display = 'none';
+                document.getElementById('questionnaire-content-2').style.display = '';
 
-            // Restore content 2 button states
-            if (submitButton2 && state.hasOwnProperty('submitButton2Disabled')) {
-                submitButton2.disabled = state.submitButton2Disabled;
-            }
+                // Restore progress text for content 2
+                if (progressText && state.progressText) {
+                    progressText.textContent = state.progressText;
+                }
 
-            // Restore the progress bar state if it was saved
-            if (progressBarFill && state.progressBarWidth) {
-                progressBarFill.style.width = state.progressBarWidth;
+                // Restore content 2 button states
+                if (submitButton2 && state.hasOwnProperty('submitButton2Disabled')) {
+                    submitButton2.disabled = state.submitButton2Disabled;
+                }
+
+                // Restore the progress bar state if it was saved
+                if (progressBarFill && state.progressBarWidth) {
+                    progressBarFill.style.width = state.progressBarWidth;
+                }
             }
         } else {
-            document.getElementById('questionnaire-content-1').style.display = '';
-            document.getElementById('questionnaire-content-2').style.display = 'none';
+            // Calculate progress text for content 1
+            const answeredCount = items1.filter(item => item.querySelector('.radio:checked')).length;
+            const progressTextContent = answeredCount === 0
+                ? "Welcome! We're grateful you're here. Let's get started"
+                : `${answeredCount} of ${items1.length}`;
 
-            // For content 1, recalculate everything based on restored answers
-            updateButtons1(); // This will set the correct button states
-            updateProgressBar1(); // This will restore the progress bar
-            updateProgressText1(); // This will restore the correct progress text
+            // Use dissolve transition when restoring to content 1
+            if (document.getElementById('questionnaire-content-2').style.display !== 'none') {
+                dissolveTransition('questionnaire-content-2', 'questionnaire-content-1', () => {
+                    // For content 1, recalculate everything based on restored answers
+                    updateButtons1(); // This will set the correct button states
+                    updateProgressBar1(); // This will restore the progress bar
 
-            // Scroll to the latest active question instantly
-            const activeItems = Array.from(document.querySelectorAll('#questionnaire-content-1 .questionnaire-item.active'));
-            if (activeItems.length > 0) {
-                const lastActiveItem = activeItems[activeItems.length - 1];
-                lastActiveItem.scrollIntoView({ behavior: 'instant', block: 'start' });
+                    // Scroll to the latest active question instantly
+                    const activeItems = Array.from(document.querySelectorAll('#questionnaire-content-1 .questionnaire-item.active'));
+                    if (activeItems.length > 0) {
+                        const lastActiveItem = activeItems[activeItems.length - 1];
+                        lastActiveItem.scrollIntoView({ behavior: 'instant', block: 'start' });
+                    }
+                }, progressTextContent);
+            } else {
+                // Already on content 1, just restore states
+                document.getElementById('questionnaire-content-1').style.display = '';
+                document.getElementById('questionnaire-content-2').style.display = 'none';
+
+                // For content 1, recalculate everything based on restored answers
+                updateButtons1(); // This will set the correct button states
+                updateProgressBar1(); // This will restore the progress bar
+                updateProgressText1(); // This will restore the correct progress text
+
+                // Scroll to the latest active question instantly
+                const activeItems = Array.from(document.querySelectorAll('#questionnaire-content-1 .questionnaire-item.active'));
+                if (activeItems.length > 0) {
+                    const lastActiveItem = activeItems[activeItems.length - 1];
+                    lastActiveItem.scrollIntoView({ behavior: 'instant', block: 'start' });
+                }
             }
         }
     }
@@ -158,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         const backToInvitationLink = document.getElementById('back-to-invitation-link');
         backToInvitationLink && backToInvitationLink.addEventListener('click', () => {
-            sessionStorage.removeItem('questionnaireState');
+            clearQuestionnaireState();
         });
 
         // Load state AFTER all the questionnaire logic is set up
@@ -174,6 +265,49 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitButton1 = document.getElementById('submit-button-1');
     const progressBarFill = document.querySelector('#progress-bar-1 .progress-bar-fill');
     let sum = 0;
+    
+    // Helper function for dissolve transition between questionnaire contents
+    function dissolveTransition(fromContent, toContent, callback, progressTextUpdate) {
+        const fromElement = document.getElementById(fromContent);
+        const toElement = document.getElementById(toContent);
+        
+        if (!fromElement || !toElement) {
+            callback && callback();
+            return;
+        }
+        
+        // Update progress text first before any animation
+        if (progressTextUpdate && progressText) {
+            setProgressTextSmooth(progressTextUpdate);
+        }
+        
+        // Start dissolve out animation after a short delay to ensure progress text is updated
+        setTimeout(() => {
+            fromElement.classList.add('dissolve-out');
+            
+            setTimeout(() => {
+                // Hide the from element and show the to element
+                fromElement.style.display = 'none';
+                fromElement.classList.remove('dissolve-out');
+                
+                // Prepare the to element for animation
+                toElement.classList.add('dissolve-prepare');
+                toElement.style.display = '';
+                
+                // Start dissolve in animation
+                setTimeout(() => {
+                    toElement.classList.remove('dissolve-prepare');
+                    toElement.classList.add('dissolve-in');
+                    
+                    // Clean up animation class after animation completes
+                    setTimeout(() => {
+                        toElement.classList.remove('dissolve-in');
+                        callback && callback();
+                    }, 300);
+                }, 50);
+            }, 300);
+        }, 100); // Small delay to let progress text update first
+    }
     function updateProgressBar1() {
         if (!progressBarFill || items1.length === 0) return;
         const answeredCount = items1.filter(item => item.querySelector('.radio:checked')).length;
@@ -195,7 +329,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (sum === 0) {
             submitButton1.style.display = '';
             nextButton1.style.display = 'none';
-            submitButton1.disabled = answeredCount !== items1.length;
+            // Allow submission when score is 0, even if not all questions are answered
+            submitButton1.disabled = false;
         } else {
             nextButton1.style.display = '';
             submitButton1.style.display = 'none';
@@ -254,27 +389,32 @@ document.addEventListener('DOMContentLoaded', function () {
             if (item.classList.contains('active')) content1State.active.push(item.id);
         });
 
-        document.getElementById('questionnaire-content-1').style.display = 'none';
-        document.getElementById('questionnaire-content-2').style.display = '';
-        progressText && setProgressTextSmooth("You're doing great! Just one more step.");
-
-        // Restore any existing content 2 state
-        const existingState = JSON.parse(sessionStorage.getItem('questionnaireState') || '{}');
-        if (existingState.content === 2 && existingState.answers && existingState.answers['phq9-10']) {
-            // Restore content 2 answer and button state
-            const item = document.getElementById('phq9-10');
-            if (item) {
-                const radio = item.querySelector(`.radio[value="${existingState.answers['phq9-10']}"]`);
-                if (radio) {
-                    radio.checked = true;
-                    updateButtons2(); // This will enable submit button if answered
+        // Use dissolve transition to switch to content 2 with progress text update
+        dissolveTransition('questionnaire-content-1', 'questionnaire-content-2', () => {
+            // Restore any existing content 2 state
+            const existingState = JSON.parse(sessionStorage.getItem('questionnaireState') || '{}');
+            if (existingState.content === 2 && existingState.answers && existingState.answers['phq9-10']) {
+                // Restore content 2 answer and button state
+                const item = document.getElementById('phq9-10');
+                if (item) {
+                    const radio = item.querySelector(`.radio[value="${existingState.answers['phq9-10']}"]`);
+                    if (radio) {
+                        radio.checked = true;
+                        updateButtons2(); // This will enable submit button if answered
+                    }
                 }
             }
-        }
 
-        // Update session storage
-        Object.assign(existingState, content1State, { content: 2, progressText: "You're doing great! Just one more step." });
-        sessionStorage.setItem('questionnaireState', JSON.stringify(existingState));
+            // Update session storage
+            Object.assign(existingState, content1State, { content: 2, progressText: "You're doing great! Just one more step." });
+            sessionStorage.setItem('questionnaireState', JSON.stringify(existingState));
+        }, "You're doing great! Just one more step.");
+    });
+
+    // Add event listener for submit button in content 1 (when score is 0)
+    submitButton1 && submitButton1.addEventListener('click', () => {
+        // When submitting from content 1 with score 0, go directly to results
+        window.location.href = 'result.html?score=' + sum;
     });
 
     // --- Questionnaire 2 logic ---
@@ -306,25 +446,22 @@ document.addEventListener('DOMContentLoaded', function () {
             if (item.classList.contains('active')) currentState.active.push(item.id);
         });
 
-        document.getElementById('questionnaire-content-2').style.display = 'none';
-        document.getElementById('questionnaire-content-1').style.display = '';
+        // Calculate progress text for content 1
+        const answeredCount = items1.filter(item => item.querySelector('.radio:checked')).length;
+        const progressTextContent = answeredCount === 0
+            ? "Welcome! We're grateful you're here. Let's get started"
+            : `${answeredCount} of ${items1.length}`;
 
-        // Recalculate buttons for content 1 (this ensures next button appears if all questions are answered)
-        updateButtons1();
+        // Use dissolve transition to switch back to content 1 with progress text update
+        dissolveTransition('questionnaire-content-2', 'questionnaire-content-1', () => {
+            // Recalculate buttons for content 1 (this ensures next button appears if all questions are answered)
+            updateButtons1();
 
-        if (progressText) {
-            const answeredCount = items1.filter(item => item.querySelector('.radio:checked')).length;
-            setProgressTextSmooth(
-                answeredCount === 0
-                    ? "Welcome! We're grateful you're here. Let's get started"
-                    : `${answeredCount} of ${items1.length}`
-            );
-        }
-
-        // Update session storage with the previous state
-        const existingState = JSON.parse(sessionStorage.getItem('questionnaireState') || '{}');
-        Object.assign(existingState, currentState, { content: 1 });
-        sessionStorage.setItem('questionnaireState', JSON.stringify(existingState));
+            // Update session storage with the previous state
+            const existingState = JSON.parse(sessionStorage.getItem('questionnaireState') || '{}');
+            Object.assign(existingState, currentState, { content: 1 });
+            sessionStorage.setItem('questionnaireState', JSON.stringify(existingState));
+        }, progressTextContent);
     });
     submitButton2 && submitButton2.addEventListener('click', () => {
         const selected = items2.map(item => {
@@ -408,6 +545,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 scoreContainer.style.border = '1px solid #8FE8B4';
                 scoreContainer.style.backgroundColor = '#f2f7f3';
                 scoreDescriptionTitle.textContent = "You're in a good place mentally";
+                scoreDescriptionTitle.style.color = '#5dcc8bff';
                 scoreDescription.textContent = "No action needed right now. Your responses suggest you're managing well. Continue your current self-care routine.";
             } else if (score <= 9) {
                 scoreStage.textContent = 'Mild Depression';
@@ -415,6 +553,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 scoreContainer.style.border = '1px solid #CBEA91';
                 scoreContainer.style.backgroundColor = '#F7FBEF';
                 scoreDescriptionTitle.textContent = "Keep monitoring how you feel";
+                scoreDescriptionTitle.style.color = '#98c14cff';
                 scoreDescription.textContent = "Consider retaking this survey in a few weeks to track any changes in your mood.";
             } else if (score <= 14) {
                 scoreStage.textContent = 'Moderate Depression';
@@ -422,6 +561,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 scoreContainer.style.border = '1px solid #FFD268';
                 scoreContainer.style.backgroundColor = '#FFFBF3';
                 scoreDescriptionTitle.textContent = "It's time to reach out for support";
+                scoreDescriptionTitle.style.color = '#eb9407ff';
                 scoreDescription.textContent = "This might be a good time to talk to someone you trust, contact your primary care doctor, or look into counseling resources in your area.";
             } else if (score <= 19) {
                 scoreStage.textContent = 'Moderately severe Depression';
@@ -429,6 +569,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 scoreContainer.style.border = '1px solid #FFB086';
                 scoreContainer.style.backgroundColor = '#FFF4EE';
                 scoreDescriptionTitle.textContent = "Consider both medication and counseling";
+                scoreDescriptionTitle.style.color = '#eb6f22ff';
                 scoreDescription.textContent = "Reach out to your healthcare provider to discuss prescription options and ask for a referral to a counselor or therapist.";
             } else {
                 scoreStage.textContent = 'Severe Depression';
@@ -436,6 +577,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 scoreContainer.style.border = '1px solid #FFA8A3';
                 scoreContainer.style.backgroundColor = '#FFF2F1';
                 scoreDescriptionTitle.textContent = "Seek immediate professional help";
+                scoreDescriptionTitle.style.color = '#f07065ff';
                 scoreDescription.textContent = "Contact your doctor right away to discuss medication options and ask for an urgent referral to a mental health specialist. You deserve support and care.";
             }
         }
@@ -443,13 +585,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const closeResultsButton = document.getElementById('close-results-button');
         const closeButton = document.getElementById('close-button');
         function closeResultsModal() {
+            // Clear all questionnaire state when closing results
+            clearQuestionnaireState();
+            
             if (modal) {
                 modal.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
                 modal.style.opacity = '0';
                 modal.style.transform = 'scale(0.95)';
                 setTimeout(() => {
                     window.close();
-                    setTimeout(() => { window.location.href = 'index.html'; }, 100);
+                    setTimeout(() => { 
+                        // Store flag to trigger push-in animation on return
+                        sessionStorage.setItem('triggerPushIn', 'true');
+                        window.location.href = 'index.html'; 
+                    }, 100);
                 }, 500);
             }
         }
@@ -458,12 +607,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // --- Modal Collapse/Expand Logic ---
-    const modal = document.querySelector('.modal');
     const modalNav = document.querySelector('.modal-nav');
     const collapsedModalContent = document.getElementById('collapsed-modal-content');
     const declineInvitation = document.getElementById('decline-invitation');
     const declineInformation = document.getElementById('decline-information');
-    const closeModalButton = document.getElementById('close-modal-button');
     collapsedModalContent && (collapsedModalContent.style.display = 'none');
     const reminderButtons = document.querySelectorAll('.reminder-button');
     reminderButtons.forEach(button => button.addEventListener('click', e => { e.preventDefault(); collapseModal(); }));
