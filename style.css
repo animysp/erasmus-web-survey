@@ -805,7 +805,7 @@ label.checkbox {
 /* Questionnaire Styles */
 
 
-.questionnaire .modal-content {
+.modal-content.questionnaire  {
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -954,7 +954,7 @@ label.checkbox {
 
 /*Questionnaire Footer*/
 
-.questionnaire .modal-footer {
+.modal-footer {
     display: flex;
     flex-direction: row;
     height: 48px;
@@ -964,8 +964,7 @@ label.checkbox {
     gap: 8px;
     background: linear-gradient(90deg, #DFDEFF 0%, #C7C3FF 100%);
 }
-
-.questionnaire .modal-footer .vertical-divider {
+.modal-footer .vertical-divider {
     width: 1px;
     height: 16px;
     background-color: var(--color-neutral-300);
