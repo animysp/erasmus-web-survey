@@ -104,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function () {
     
     function saveQuestionnaireState() {
         const state = {
-            content: document.getElementById('questionnaire-content-2')?.style.display !== 'none' ? 2 : 1,
             answers: {},
             active: [],
             progressText: progressText ? progressText.textContent : '',
@@ -124,11 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
             state.submitButton1Disabled = submitButton1.disabled;
         }
 
-        // Save button states for content 2
-        if (submitButton2) {
-            state.submitButton2Disabled = submitButton2.disabled;
-        }
-
         // Save progress bar state
         if (progressBarFill) {
             state.progressBarWidth = progressBarFill.style.width;
@@ -141,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const state = JSON.parse(sessionStorage.getItem('questionnaireState') || '{}');
         if (!state.answers) return;
 
-        // Restore sum from saved state
+        // Load the sum if it was saved
         if (state.sum !== undefined) {
             sum = state.sum;
         }
@@ -165,78 +159,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        if (state.content === 2) {
-            // Use dissolve transition when restoring to content 2
-            if (document.getElementById('questionnaire-content-1').style.display !== 'none') {
-                dissolveTransition('questionnaire-content-1', 'questionnaire-content-2', () => {
-                    // Restore content 2 button states
-                    if (submitButton2 && state.hasOwnProperty('submitButton2Disabled')) {
-                        submitButton2.disabled = state.submitButton2Disabled;
-                    }
+        // Restore content 1 states
+        updateButtons1(); // This will set the correct button states
+        updateProgressBar1(); // This will restore the progress bar
+        updateProgressText1(); // This will restore the correct progress text
 
-                    // Restore the progress bar state if it was saved
-                    if (progressBarFill && state.progressBarWidth) {
-                        progressBarFill.style.width = state.progressBarWidth;
-                    }
-                }, state.progressText || "You're doing great! Just one more step.");
-            } else {
-                // Already on content 2, just restore states
-                document.getElementById('questionnaire-content-1').style.display = 'none';
-                document.getElementById('questionnaire-content-2').style.display = '';
-
-                // Restore progress text for content 2
-                if (progressText && state.progressText) {
-                    progressText.textContent = state.progressText;
-                }
-
-                // Restore content 2 button states
-                if (submitButton2 && state.hasOwnProperty('submitButton2Disabled')) {
-                    submitButton2.disabled = state.submitButton2Disabled;
-                }
-
-                // Restore the progress bar state if it was saved
-                if (progressBarFill && state.progressBarWidth) {
-                    progressBarFill.style.width = state.progressBarWidth;
-                }
-            }
-        } else {
-            // Calculate progress text for content 1
-            const answeredCount = items1.filter(item => item.querySelector('.radio:checked')).length;
-            const progressTextContent = answeredCount === 0
-                ? "Welcome! We're grateful you're here. Let's get started"
-                : `${answeredCount} of ${items1.length}`;
-
-            // Use dissolve transition when restoring to content 1
-            if (document.getElementById('questionnaire-content-2').style.display !== 'none') {
-                dissolveTransition('questionnaire-content-2', 'questionnaire-content-1', () => {
-                    // For content 1, recalculate everything based on restored answers
-                    updateButtons1(); // This will set the correct button states
-                    updateProgressBar1(); // This will restore the progress bar
-
-                    // Scroll to the latest active question instantly
-                    const activeItems = Array.from(document.querySelectorAll('#questionnaire-content-1 .questionnaire-item.active'));
-                    if (activeItems.length > 0) {
-                        const lastActiveItem = activeItems[activeItems.length - 1];
-                        lastActiveItem.scrollIntoView({ behavior: 'instant', block: 'start' });
-                    }
-                }, progressTextContent);
-            } else {
-                // Already on content 1, just restore states
-                document.getElementById('questionnaire-content-1').style.display = '';
-                document.getElementById('questionnaire-content-2').style.display = 'none';
-
-                // For content 1, recalculate everything based on restored answers
-                updateButtons1(); // This will set the correct button states
-                updateProgressBar1(); // This will restore the progress bar
-                updateProgressText1(); // This will restore the correct progress text
-
-                // Scroll to the latest active question instantly
-                const activeItems = Array.from(document.querySelectorAll('#questionnaire-content-1 .questionnaire-item.active'));
-                if (activeItems.length > 0) {
-                    const lastActiveItem = activeItems[activeItems.length - 1];
-                    lastActiveItem.scrollIntoView({ behavior: 'instant', block: 'start' });
-                }
-            }
+        // Scroll to the latest active question instantly
+        const activeItems = Array.from(document.querySelectorAll('#questionnaire-content-1 .questionnaire-item.active'));
+        if (activeItems.length > 0) {
+            const lastActiveItem = activeItems[activeItems.length - 1];
+            lastActiveItem.scrollIntoView({ behavior: 'instant', block: 'start' });
         }
     }
 
@@ -265,49 +197,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitButton1 = document.getElementById('submit-button-1');
     const progressBarFill = document.querySelector('#progress-bar-1 .progress-bar-fill');
     let sum = 0;
-    
-    // Helper function for dissolve transition between questionnaire contents
-    function dissolveTransition(fromContent, toContent, callback, progressTextUpdate) {
-        const fromElement = document.getElementById(fromContent);
-        const toElement = document.getElementById(toContent);
-        
-        if (!fromElement || !toElement) {
-            callback && callback();
-            return;
-        }
-        
-        // Update progress text first before any animation
-        if (progressTextUpdate && progressText) {
-            setProgressTextSmooth(progressTextUpdate);
-        }
-        
-        // Start dissolve out animation after a short delay to ensure progress text is updated
-        setTimeout(() => {
-            fromElement.classList.add('dissolve-out');
-            
-            setTimeout(() => {
-                // Hide the from element and show the to element
-                fromElement.style.display = 'none';
-                fromElement.classList.remove('dissolve-out');
-                
-                // Prepare the to element for animation
-                toElement.classList.add('dissolve-prepare');
-                toElement.style.display = '';
-                
-                // Start dissolve in animation
-                setTimeout(() => {
-                    toElement.classList.remove('dissolve-prepare');
-                    toElement.classList.add('dissolve-in');
-                    
-                    // Clean up animation class after animation completes
-                    setTimeout(() => {
-                        toElement.classList.remove('dissolve-in');
-                        callback && callback();
-                    }, 300);
-                }, 50);
-            }, 300);
-        }, 100); // Small delay to let progress text update first
-    }
     function updateProgressBar1() {
         if (!progressBarFill || items1.length === 0) return;
         const answeredCount = items1.filter(item => item.querySelector('.radio:checked')).length;
@@ -326,16 +215,10 @@ document.addEventListener('DOMContentLoaded', function () {
             submitButton1.style.display = 'none';
             return;
         }
-        if (sum === 0) {
-            submitButton1.style.display = '';
-            nextButton1.style.display = 'none';
-            // Allow submission when score is 0, even if not all questions are answered
-            submitButton1.disabled = false;
-        } else {
-            nextButton1.style.display = '';
-            submitButton1.style.display = 'none';
-            nextButton1.disabled = answeredCount !== items1.length;
-        }
+        // Always show submit button when there are answers
+        submitButton1.style.display = '';
+        nextButton1.style.display = 'none';
+        submitButton1.disabled = answeredCount !== items1.length;
     }
     const progressText = document.getElementById('progress-text');
     function setProgressTextSmooth(newText) {
@@ -373,102 +256,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-    // Update the next button logic to preserve content 2 state
-    nextButton1 && nextButton1.addEventListener('click', () => {
-        // Save current content 1 state
-        const content1State = {
-            content: 1,
-            answers: {},
-            active: [],
-            sum: sum,
-            progressBarWidth: progressBarFill ? progressBarFill.style.width : ''
-        };
-        document.querySelectorAll('#questionnaire-content-1 .questionnaire-item').forEach(item => {
-            const checked = item.querySelector('.radio:checked');
-            if (checked) content1State.answers[item.id] = checked.value;
-            if (item.classList.contains('active')) content1State.active.push(item.id);
-        });
 
-        // Use dissolve transition to switch to content 2 with progress text update
-        dissolveTransition('questionnaire-content-1', 'questionnaire-content-2', () => {
-            // Restore any existing content 2 state
-            const existingState = JSON.parse(sessionStorage.getItem('questionnaireState') || '{}');
-            if (existingState.content === 2 && existingState.answers && existingState.answers['phq9-10']) {
-                // Restore content 2 answer and button state
-                const item = document.getElementById('phq9-10');
-                if (item) {
-                    const radio = item.querySelector(`.radio[value="${existingState.answers['phq9-10']}"]`);
-                    if (radio) {
-                        radio.checked = true;
-                        updateButtons2(); // This will enable submit button if answered
-                    }
-                }
-            }
-
-            // Update session storage
-            Object.assign(existingState, content1State, { content: 2, progressText: "You're doing great! Just one more step." });
-            sessionStorage.setItem('questionnaireState', JSON.stringify(existingState));
-        }, "You're doing great! Just one more step.");
-    });
-
-    // Add event listener for submit button in content 1 (when score is 0)
+    // Add event listener for submit button
     submitButton1 && submitButton1.addEventListener('click', () => {
-        // When submitting from content 1 with score 0, go directly to results
         window.location.href = 'result.html?score=' + sum;
-    });
-
-    // --- Questionnaire 2 logic ---
-    const items2 = Array.from(document.querySelectorAll('#questionnaire-content-2 .questionnaire-item'));
-    const radios2 = Array.from(document.querySelectorAll('#questionnaire-content-2 .radio'));
-    const previousButton1 = document.getElementById('previous-button-1');
-    const submitButton2 = document.getElementById('submit-button-2');
-    function updateButtons2() {
-        const selected = items2.map(item => {
-            const checked = item.querySelector('.radio:checked');
-            return checked ? Number(checked.value) : null;
-        });
-        submitButton2.disabled = selected.filter(v => v !== null).length !== items2.length;
-    }
-    submitButton2 && (submitButton2.disabled = true);
-    radios2.forEach(radio => radio.addEventListener('change', updateButtons2));
-    // Update the previous button logic
-    previousButton1 && previousButton1.addEventListener('click', () => {
-        // Save current state before switching
-        const currentState = {
-            content: 2,
-            answers: {},
-            active: [],
-            submitButton2Disabled: submitButton2.disabled
-        };
-        document.querySelectorAll('.questionnaire-item').forEach(item => {
-            const checked = item.querySelector('.radio:checked');
-            if (checked) currentState.answers[item.id] = checked.value;
-            if (item.classList.contains('active')) currentState.active.push(item.id);
-        });
-
-        // Calculate progress text for content 1
-        const answeredCount = items1.filter(item => item.querySelector('.radio:checked')).length;
-        const progressTextContent = answeredCount === 0
-            ? "Welcome! We're grateful you're here. Let's get started"
-            : `${answeredCount} of ${items1.length}`;
-
-        // Use dissolve transition to switch back to content 1 with progress text update
-        dissolveTransition('questionnaire-content-2', 'questionnaire-content-1', () => {
-            // Recalculate buttons for content 1 (this ensures next button appears if all questions are answered)
-            updateButtons1();
-
-            // Update session storage with the previous state
-            const existingState = JSON.parse(sessionStorage.getItem('questionnaireState') || '{}');
-            Object.assign(existingState, currentState, { content: 1 });
-            sessionStorage.setItem('questionnaireState', JSON.stringify(existingState));
-        }, progressTextContent);
-    });
-    submitButton2 && submitButton2.addEventListener('click', () => {
-        const selected = items2.map(item => {
-            const checked = item.querySelector('.radio:checked');
-            return checked ? Number(checked.value) : 0;
-        });
-        window.location.href = 'result.html?score=' + (sum + selected.reduce((acc, v) => acc + v, 0));
     });
 
     // --- Consent Check ---
