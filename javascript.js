@@ -431,6 +431,12 @@ document.addEventListener('DOMContentLoaded', function () {
         invitationWarning && (invitationWarning.style.opacity = 0);
         informationWarning && (informationWarning.style.opacity = 0);
 
+        // Reset consent checkboxes
+        const invitationConsentCheckbox = document.getElementById('consent-checkbox-invitation');
+        const informationConsentCheckbox = document.getElementById('consent-checkbox-information');
+        invitationConsentCheckbox && (invitationConsentCheckbox.checked = false);
+        informationConsentCheckbox && (informationConsentCheckbox.checked = false);
+
         setTimeout(() => {
             contents.forEach(content => { content && (content.style.display = 'none'); });
             modal.style.width = '96px';

@@ -290,6 +290,12 @@ strong {
     fill: currentColor;
 }
 
+.button-link svg.small {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
 .button-link:hover {
     color: var(--color-brand-primary-400);
     text-decoration: underline;
@@ -751,6 +757,7 @@ label.checkbox {
     box-sizing: border-box;
     padding-bottom: 64px;
     color: var(--color-neutral-800);
+    text-align: justify;
 }
 
 .information-title {
@@ -764,16 +771,31 @@ label.checkbox {
     gap: 8px;
 }
 
+
 .information-item ul {
     margin: 0;
     font-size: var(--p1-light-font-size);
     line-height: var(--p1-light-line-height);
     letter-spacing: var(--p1-light-letter-spacing);
     font-weight: var(--p1-light-font-weight);
+    text-align: justify;
 
 }
+.information-item ol {
+    margin: 0;
+    font-size: var(--p1-light-font-size);
+    line-height: var(--p1-light-line-height);
+    letter-spacing: var(--p1-light-letter-spacing);
+    font-weight: var(--p1-light-font-weight);
+    text-align: justify;
+    padding-left: 28px;
+}
+.information-item li {
+    margin: 0;
+    padding: 4px 0;
+}
 
-#information-item-6 {
+#information-item-7 {
     flex: 1 1 0;
     min-height: 424px;
 }
